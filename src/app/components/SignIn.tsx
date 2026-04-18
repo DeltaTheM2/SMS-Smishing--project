@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
 import { trackEvent } from '../api';
 import { MsPage, SsoCard, SsoButton } from './SsoLayout';
-import msLogo from '../../assets/ms-logo.svg';
+import msLogo from '../../assets/ms-logo.png';
 
 export function SignIn() {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export function SignIn() {
       <SsoCard>
         <div className="sso-page-content" style={{ padding: '44px' }}>
           {/* Microsoft Logo */}
-          <img src={msLogo} alt="Microsoft" style={{ height: '24px', marginBottom: '16px' }} />
+          <img src={msLogo} alt="Microsoft" style={{ height: '54px', marginBottom: '16px' }} />
 
           {/* Heading */}
           <h1 style={{ fontSize: '24px', fontWeight: 600, margin: '16px 0 12px', lineHeight: '28px', color: '#1b1b1b' }}>
