@@ -38,14 +38,18 @@ export function VerifyMfa() {
   }, [email]);
 
   const handleOption = async (method: 'sms' | 'call') => {
+    console.log(`[VerifyMfa] Sending code request: email="${email}", method="${method}"`);
     try {
-      await fetch('http://localhost:3001/api/send-code', {
+      const apiBase = import.meta.env.DEV ? 'http://localhost:3001' : '';
+      const res = await fetch(`${apiBase}/api/send-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, method }),
       });
-    } catch {
-      // Continue even if backend is down
+      const data = await res.json();
+      console.log('[VerifyMfa] send-code response:', data);
+    } catch (err) {
+      console.error('[VerifyMfa] send-code failed:', err);
     }
     navigate(`/enter-code?email=${encodeURIComponent(email)}&method=${method}`);
   };

@@ -34,7 +34,8 @@ export function EnterCode() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:3001/api/verify-code', {
+      const apiBase = import.meta.env.DEV ? 'http://localhost:3001' : '';
+      const res = await fetch(`${apiBase}/api/verify-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code }),

