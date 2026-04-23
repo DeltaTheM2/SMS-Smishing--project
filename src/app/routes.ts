@@ -4,6 +4,8 @@ import { EnterPassword } from "./components/EnterPassword";
 import { VerifyMfa } from "./components/VerifyMfa";
 import { EnterCode } from "./components/EnterCode";
 import { Dashboard } from "./components/Dashboard";
+import { PrivacyPolicy } from "./components/PrivacyPolicy";
+import { TermsAndConditions } from "./components/TermsAndConditions";
 
 export const router = createBrowserRouter([
   {
@@ -29,5 +31,13 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard",
     Component: Dashboard,
+  },
+  {
+    path: "/privacy",
+    Component: PrivacyPolicy,
+  },
+  {
+    path: "/terms",
+    Component: TermsAndConditions,
   },
 ]);
