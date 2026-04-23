@@ -412,8 +412,12 @@ app.post('/api/reset', (req, res) => {
 });
 
 // ─── Serve Frontend (production) ───
-const clientBuildPath = path.join(__dirname, '..', 'dist', 'client');
-if (fs.existsSync(clientBuildPath)) {
+// Try dist/client first (some Vite setups), then dist/ (default Vite output)
+let clientBuildPath = path.join(__dirname, '..', 'dist', 'client');
+if (!fs.existsSync(clientBuildPath)) {
+  clientBuildPath = path.join(__dirname, '..', 'dist');
+}
+if (fs.existsSync(path.join(clientBuildPath, 'index.html'))) {
   app.use(express.static(clientBuildPath));
   // All non-API routes serve the React app (SPA fallback)
   app.get('*', (req, res) => {
@@ -422,6 +426,9 @@ if (fs.existsSync(clientBuildPath)) {
     }
   });
   console.log('📦 Serving frontend from', clientBuildPath);
+} else {
+  console.log('⚠️  No frontend build found. Looked in:', clientBuildPath);
+  console.log('   Run "npm run build" in the root directory first.');
 }
 
 // ─── Start ───
